@@ -10,4 +10,4 @@ LOGGING_CONFIG["formatters"]["access"][
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", log_config=LOGGING_CONFIG, reload=True)
+    uvicorn.run("app:app", host="0.0.0.0", port=80, log_config=LOGGING_CONFIG, reload=True)
