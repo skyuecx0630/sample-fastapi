@@ -1,22 +1,13 @@
-from fastapi import FastAPI, Response
-from datetime import datetime
+import uvicorn
+from uvicorn.config import LOGGING_CONFIG
 
-app = FastAPI()
-
-
-@app.get("/")
-def hello(http_res: Response):
-    http_res.status_code = 200
-    return "hello"
-
-
-@app.get("/health")
-def health(http_res: Response):
-    http_res.status_code = 200
-    return "OK"
+LOGGING_CONFIG["formatters"]["default"][
+    "fmt"
+] = "%(asctime)s [%(name)s] %(levelprefix)s %(message)s"
+LOGGING_CONFIG["formatters"]["access"][
+    "fmt"
+] = '%(asctime)s [%(name)s] %(levelprefix)s %(client_addr)s - "%(request_line)s" %(status_code)s'
 
 
-@app.get("/now")
-def now(http_res: Response):
-    http_res.status_code = 200
-    return str(datetime.now())
+if __name__ == "__main__":
+    uvicorn.run("app:app", log_config=LOGGING_CONFIG, reload=True)
