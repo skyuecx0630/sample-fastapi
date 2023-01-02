@@ -3,6 +3,13 @@ from datetime import datetime
 
 from fastapi import FastAPI, Response
 import boto3
+import botocore
+
+BOTO3_CONFIG = botocore.client.Config(
+    connect_timeout=1,
+    read_timeout=1,
+    retries={"max_attempts": 0}
+)
 
 logger = logging.getLogger('uvicorn')
 app = FastAPI()
@@ -28,7 +35,7 @@ def now(http_res: Response):
 
 @app.get("/bucket")
 def bucket(http_res: Response):
-    client = boto3.client('s3')
+    client = boto3.client('s3', config=BOTO3_CONFIG)
     BUCKET = "hmoon-skills.net"
     KEY = "ACCESS_TEST"
 
